@@ -1,0 +1,27 @@
+<header class="bg-dark text-white p-2 mb-2 text-center">
+    <h1>Participant Dashboard</h1>
+  </header>
+  
+  <div class="container mt-4">
+    <div *ngIf="events.length === 0">No events available. Check back later!</div>
+  
+    <div *ngFor="let event of events" class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ event.title }}</h5>
+        <p class="card-text">{{ event.description }}</p>
+        <p class="card-text"><strong>Date:</strong> {{ event.date }}</p>
+        <p class="card-text"><strong>Location:</strong> {{ event.location }}</p>
+        <p class="card-text"><strong>Category:</strong> {{ event.category }}</p>
+        <button class="btn btn-primary" (click)="register(event.id)">Register</button>
+      </div>
+    </div>
+  
+    <div *ngIf="successMessage" class="alert alert-success mt-3">
+      {{ successMessage }}
+    </div>
+  
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
+  </div>
+  

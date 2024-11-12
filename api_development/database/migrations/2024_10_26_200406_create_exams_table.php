@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
+            $table->string('student_id');
+            $table->string('course_id');
+            $table->integer('score');
             $table->timestamps();
         });
     }
