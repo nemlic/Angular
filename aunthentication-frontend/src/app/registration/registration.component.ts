@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MustMatch } from '../confirm.validator';
-
+import { DataService } from '../service/data.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-registration',
@@ -12,8 +13,13 @@ export class RegistrationComponent {
 
   form!: FormGroup;
   submitted=false;
+  data: any;
 
-  constructor (private formBuilder: FormBuilder){}
+  constructor (private formBuilder: FormBuilder,
+    private dataservice: DataService,
+    private toastr: ToastrService
+  ){}
+
   createForm(){
     this.form=this.formBuilder.group({
      
@@ -40,6 +46,40 @@ export class RegistrationComponent {
        if(this.form.invalid){
         return;
          }
-   
+         this.dataservice.registerUser(this.form.value).subscribe(
+          (res: any) => {
+            this.data = res;
+            if (this.data.status === 1) {
+              this.toastr.success(
+                JSON.stringify(this.data.message),
+                JSON.stringify(this.data.code),
+                {
+                  timeOut: 2000,
+                  progressBar: true
+                }
+              );
+            } else {
+              this.toastr.error(
+                JSON.stringify(this.data.message),
+                JSON.stringify(this.data.code),
+                {
+                  timeOut: 2000,
+                  progressBar: true
+                }
+              );
+            }
+            this.submitted = false;
+            this.form.reset(); // Reset entire form
+          },
+          (error) => {
+            console.error('Error:', error);
+            this.toastr.error('Registration failed', 'Error', {
+              timeOut: 2000,
+              progressBar: true
+            });
+          }
+        );
     }
+
+
 }
