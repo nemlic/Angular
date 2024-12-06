@@ -24,7 +24,7 @@ export class HomeComponent {
  
   logout(){
     localStorage.removeItem('token');
-    this.router.navigate([''])
+    this.router.navigate(['login'])
   }
 }
 

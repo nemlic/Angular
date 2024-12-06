@@ -52,7 +52,7 @@ export class LoginComponent {
    
           this.token=this.data.data.token;
           localStorage.setItem('token', this.token);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/']);
           this.toastr.success(JSON.stringify(this.data.message),JSON.stringify(this.data.code),{
             timeOut:2000,
             progressBar:true
