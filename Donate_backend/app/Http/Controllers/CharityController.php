@@ -51,7 +51,8 @@ class CharityController extends Controller
 
     public function updateProfile(Request $request) {
         $request->validate([
-            'description' => 'required|string',
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|required|string',
             'photo_url' => 'nullable|url',
         ]);
 
@@ -77,4 +78,14 @@ class CharityController extends Controller
             return response()->json(['error' => 'Charity profile not found'], 404);
         }
     }
+    public function search(Request $request) {
+        $query = $request->input('query');
+        $charities = Charity::where('name', 'like', "%$query%")
+                            ->orWhere('description', 'like', "%$query%")
+                            ->get();
+    
+        return response()->json($charities);
+    }
+    
 }
+
