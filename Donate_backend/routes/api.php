@@ -12,10 +12,6 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SpamReportController;
 use App\Http\Controllers\CommentController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
 // Auth routes
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -39,9 +35,6 @@ Route::get('donations/{id}', [DonationController::class, 'show'])->middleware('a
 Route::middleware(['auth:api'])->group(function () {
     Route::get('reports', [ReportController::class, 'index']);
     Route::get('charity-donations/{charityId}', [ReportController::class, 'charityDonations']);
-});
-
-Route::middleware(['auth:api'])->group(function () {
     Route::get('reports', [ReportController::class, 'index'])->middleware('user_type:admin');
     Route::get('charity-reports', [ReportController::class, 'charityReport'])->middleware('user_type:charity');
     Route::get('donor-reports', [ReportController::class, 'donorReport'])->middleware('user_type:donor');
@@ -79,3 +72,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('posts/{postId}/comments', [CommentController::class, 'store']);
     Route::delete('posts/{postId}/comments/{commentId}', [CommentController::class, 'destroy']);
 });
+
+// Test authentication route
+Route::middleware('auth:api')->get('/test-auth', function (Request $request) {
+    return response()->json(['message' => 'Authenticated successfully!', 'user' => $request->user()]);
+});
+

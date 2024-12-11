@@ -29,9 +29,10 @@ class AuthController extends Controller
         // Create a charity profile if user_type is charity
         if ($request->user_type === 'charity') {
             Charity::create([
+                'user_id' => $user->id,  // Ensure to associate the charity with the user
                 'name' => $request->name,
                 'description' => 'Please update your charity description.',
-                'photo_url' => null
+                'photo_url' => null,
             ]);
         }
 
@@ -61,7 +62,11 @@ class AuthController extends Controller
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
 
-        return response()->json(compact('token'));
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => auth()->user(),
+            'token' => $token
+        ]);
     }
 
     public function logout() {
